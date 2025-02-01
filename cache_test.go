@@ -29,7 +29,9 @@ func fetch(key any) (any, error) {
 
 func TestCacheConcurrent(t *testing.T) {
 	// Create a new cache with int as value type
-	cache := New[string, string](&testFetcher{testFuncDelay})
+	cache := NewWithConfig[string, string](Configuration[string, string]{
+		&testFetcher{testFuncDelay},
+	})
 	// Use a wait group to manage concurrent access
 	wg := sync.WaitGroup{}
 	// Simulate multiple concurrent requests

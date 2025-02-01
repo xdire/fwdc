@@ -25,6 +25,10 @@ type fetchOp[T any] struct {
 	res    T
 }
 
+type Configuration[K comparable, T any] struct {
+	DefaultKeyFetchFunc Fetcher[K, T]
+}
+
 type Manager[K comparable, T any] struct {
 	cache        map[K]T
 	cacheInFetch map[K]*fetchOp[T]
@@ -32,11 +36,11 @@ type Manager[K comparable, T any] struct {
 	fetcher      Fetcher[K, T]
 }
 
-func New[K comparable, T any](f Fetcher[K, T]) *Manager[K, T] {
+func NewWithConfig[K comparable, T any](c Configuration[K, T]) *Manager[K, T] {
 	return &Manager[K, T]{
 		cache:        make(map[K]T),
 		cacheInFetch: make(map[K]*fetchOp[T]),
-		fetcher:      f,
+		fetcher:      c.DefaultKeyFetchFunc,
 	}
 }
 
